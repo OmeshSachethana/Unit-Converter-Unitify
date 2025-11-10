@@ -28,20 +28,21 @@ class AboutScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Container(
-                            width: 80,
-                            height: 80,
+                            width: 100,
+                            height: 100,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [Colors.blue.shade700, Colors.blue.shade400],
-                              ),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(25),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
-                            child: const Icon(
-                              Icons.science,
-                              size: 40,
-                              color: Colors.white,
+                            child: Image.asset(
+                              'assets/unitify_logo.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -170,13 +171,24 @@ class AboutScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 12),
-                            const Text(
-                              'Unitify is developed with ❤️ using Flutter framework. '
-                              'We are committed to providing regular updates and new features to enhance your experience.',
-                              style: TextStyle(
-                                fontSize: 16,
-                                height: 1.5,
-                                color: Colors.black87,
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: Colors.black87,
+                                ),
+                                children: [
+                                  const TextSpan(text: 'Unitify is developed with ❤️ by '),
+                                  TextSpan(
+                                    text: 'CodeByte Labs.',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  const TextSpan(text: ' We are committed to providing regular updates and new features to enhance your experience.'),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -194,7 +206,7 @@ class AboutScreen extends StatelessWidget {
                                 Icon(Icons.email, color: Colors.blue.shade600, size: 20),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'support@unitify.com',
+                                  'codebyteslabs@gmail.com',
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.blue.shade600,

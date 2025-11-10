@@ -350,7 +350,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                                 Icon(Icons.email, color: Colors.blue.shade600, size: 20),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'privacy@unitify.com',
+                                  'codebyteslabs@gmail.com',
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.blue.shade600,
@@ -360,20 +360,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Icon(Icons.language, color: Colors.blue.shade600, size: 20),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'www.unitify.com/privacy',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blue.shade600,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
