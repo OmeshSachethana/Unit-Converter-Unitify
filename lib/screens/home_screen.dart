@@ -10,6 +10,8 @@ import 'converter_screens/weight_converter.dart';
 import 'converter_screens/temperature_converter.dart';
 import 'converter_screens/area_converter.dart';
 import 'converter_screens/volume_converter.dart';
+import 'about_screen.dart';
+import 'privacy_policy_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,11 +35,12 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Unit Converter – Unitify'),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 13, 4, 32),
-        foregroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 8, 5, 49),
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 2,
         shadowColor: Colors.black12,
       ),
+      drawer: _buildDrawer(context),
       body: Column(
         children: [
           const Padding(
@@ -121,6 +124,173 @@ class HomeScreen extends StatelessWidget {
           const AdBanner(),
         ],
       ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.blue.shade700, Colors.blue.shade400],
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Icon(
+                  Icons.science,
+                  size: 48,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Unitify',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Unit Converter App',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home, color: Colors.blue),
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.info, color: Colors.green),
+            title: const Text('About'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AboutScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip, color: Colors.orange),
+            title: const Text('Privacy Policy'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen()),
+              );
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.share, color: Colors.purple),
+            title: const Text('Share App'),
+            onTap: () {
+              // Share functionality would go here
+              Navigator.pop(context);
+              _showShareDialog(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.rate_review, color: Colors.amber),
+            title: const Text('Rate App'),
+            onTap: () {
+              // Rate app functionality would go here
+              Navigator.pop(context);
+              _showRateDialog(context);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.exit_to_app, color: Colors.grey),
+            title: const Text('Exit'),
+            onTap: () {
+              Navigator.pop(context);
+              _showExitDialog(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showShareDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Share Unitify'),
+          content: const Text('Share this amazing unit converter app with your friends!'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showRateDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Rate Unitify'),
+          content: const Text('If you enjoy using Unitify, please consider rating us on the app store!'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showExitDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Exit App'),
+          content: const Text('Are you sure you want to exit?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // Exit the app
+                // Note: This might not work on all platforms
+                // For mobile, you might need to use SystemNavigator.pop()
+              },
+              child: const Text('Exit'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
