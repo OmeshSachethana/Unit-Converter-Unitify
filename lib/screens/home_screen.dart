@@ -33,8 +33,8 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Unit Converter – Unitify'),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 13, 4, 32),
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),
