@@ -12,16 +12,40 @@ class TemperatureConverter extends StatefulWidget {
 class _TemperatureConverterState extends State<TemperatureConverter> {
   final TextEditingController _controller = TextEditingController();
   double _result = 0.0;
-  bool _toFahrenheit = true;
+  String _fromUnit = 'Celsius';
+  String _toUnit = 'Fahrenheit';
+
+  final List<String> _temperatureUnits = [
+    'Celsius',
+    'Fahrenheit',
+    'Kelvin'
+  ];
 
   void _convert() {
     final input = double.tryParse(_controller.text);
     if (input == null) return;
 
+    double result = 0.0;
+
+    // Handle all conversion combinations
+    if (_fromUnit == 'Celsius' && _toUnit == 'Fahrenheit') {
+      result = ConversionUtils.celsiusToFahrenheit(input);
+    } else if (_fromUnit == 'Celsius' && _toUnit == 'Kelvin') {
+      result = ConversionUtils.celsiusToKelvin(input);
+    } else if (_fromUnit == 'Fahrenheit' && _toUnit == 'Celsius') {
+      result = ConversionUtils.fahrenheitToCelsius(input);
+    } else if (_fromUnit == 'Fahrenheit' && _toUnit == 'Kelvin') {
+      result = ConversionUtils.fahrenheitToKelvin(input);
+    } else if (_fromUnit == 'Kelvin' && _toUnit == 'Celsius') {
+      result = ConversionUtils.kelvinToCelsius(input);
+    } else if (_fromUnit == 'Kelvin' && _toUnit == 'Fahrenheit') {
+      result = ConversionUtils.kelvinToFahrenheit(input);
+    } else {
+      result = input; // Same unit
+    }
+
     setState(() {
-      _result = _toFahrenheit
-          ? ConversionUtils.celsiusToFahrenheit(input)
-          : ConversionUtils.fahrenheitToCelsius(input);
+      _result = result;
     });
   }
 
@@ -47,13 +71,42 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
               ),
             ),
             const SizedBox(height: 16),
-            DropdownButton<bool>(
-              value: _toFahrenheit,
-              items: const [
-                DropdownMenuItem(value: true, child: Text('Celsius → Fahrenheit')),
-                DropdownMenuItem(value: false, child: Text('Fahrenheit → Celsius')),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: _fromUnit,
+                    items: _temperatureUnits.map((String unit) {
+                      return DropdownMenuItem<String>(
+                        value: unit,
+                        child: Text(unit),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _fromUnit = newValue!;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: _toUnit,
+                    items: _temperatureUnits.map((String unit) {
+                      return DropdownMenuItem<String>(
+                        value: unit,
+                        child: Text(unit),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _toUnit = newValue!;
+                      });
+                    },
+                  ),
+                ),
               ],
-              onChanged: (val) => setState(() => _toFahrenheit = val!),
             ),
             const SizedBox(height: 16),
             ElevatedButton(

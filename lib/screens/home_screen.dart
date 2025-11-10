@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter_unitify/screens/converter_screens/currency_converter.dart';
+import 'package:unit_converter_unitify/screens/converter_screens/digital_storage_converter.dart';
+import 'package:unit_converter_unitify/screens/converter_screens/energy_converter.dart';
+import 'package:unit_converter_unitify/screens/converter_screens/speed_converter.dart';
+import 'package:unit_converter_unitify/screens/converter_screens/time_converter.dart';
 import '../widgets/ad_banner.dart';
 import 'converter_screens/length_converter.dart';
 import 'converter_screens/weight_converter.dart';
@@ -17,6 +22,11 @@ class HomeScreen extends StatelessWidget {
       {'name': 'Temperature', 'screen': const TemperatureConverter()},
       {'name': 'Area', 'screen': const AreaConverter()},
       {'name': 'Volume', 'screen': const VolumeConverter()},
+      {'name': 'Time', 'screen': const TimeConverter()},
+      {'name': 'Speed', 'screen': const SpeedConverter()},
+      {'name': 'Digital Storage', 'screen': const DigitalStorageConverter()},
+      {'name': 'Currency', 'screen': const CurrencyConverter()},
+      {'name': 'Energy', 'screen': const EnergyConverter()},
     ];
 
     return Scaffold(

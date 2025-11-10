@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../utils/conversion_utils.dart';
 import '../../widgets/ad_banner.dart';
 
 class VolumeConverter extends StatefulWidget {
@@ -11,14 +12,100 @@ class VolumeConverter extends StatefulWidget {
 class _VolumeConverterState extends State<VolumeConverter> {
   final TextEditingController _controller = TextEditingController();
   double _result = 0.0;
-  bool _toLiters = true;
+  String _fromUnit = 'Milliliters';
+  String _toUnit = 'Liters';
+
+  final List<String> _volumeUnits = [
+    'Milliliters',
+    'Liters',
+    'Gallons',
+    'Fluid Ounces',
+    'Cubic Meters',
+    'Cubic Feet',
+    'Cubic Inches',
+    'Quarts',
+    'Pints',
+    'Cups'
+  ];
 
   void _convert() {
     final input = double.tryParse(_controller.text);
     if (input == null) return;
 
+    double valueInLiters;
+    switch (_fromUnit) {
+      case 'Milliliters':
+        valueInLiters = ConversionUtils.millilitersToLiters(input);
+        break;
+      case 'Liters':
+        valueInLiters = input;
+        break;
+      case 'Gallons':
+        valueInLiters = ConversionUtils.gallonsToLiters(input);
+        break;
+      case 'Fluid Ounces':
+        valueInLiters = ConversionUtils.fluidOuncesToLiters(input);
+        break;
+      case 'Cubic Meters':
+        valueInLiters = ConversionUtils.cubicMetersToLiters(input);
+        break;
+      case 'Cubic Feet':
+        valueInLiters = ConversionUtils.cubicFeetToLiters(input);
+        break;
+      case 'Cubic Inches':
+        valueInLiters = ConversionUtils.cubicInchesToLiters(input);
+        break;
+      case 'Quarts':
+        valueInLiters = ConversionUtils.quartsToLiters(input);
+        break;
+      case 'Pints':
+        valueInLiters = ConversionUtils.pintsToLiters(input);
+        break;
+      case 'Cups':
+        valueInLiters = ConversionUtils.cupsToLiters(input);
+        break;
+      default:
+        valueInLiters = input;
+    }
+
+    double result;
+    switch (_toUnit) {
+      case 'Milliliters':
+        result = ConversionUtils.litersToMilliliters(valueInLiters);
+        break;
+      case 'Liters':
+        result = valueInLiters;
+        break;
+      case 'Gallons':
+        result = ConversionUtils.litersToGallons(valueInLiters);
+        break;
+      case 'Fluid Ounces':
+        result = ConversionUtils.litersToFluidOunces(valueInLiters);
+        break;
+      case 'Cubic Meters':
+        result = ConversionUtils.litersToCubicMeters(valueInLiters);
+        break;
+      case 'Cubic Feet':
+        result = ConversionUtils.litersToCubicFeet(valueInLiters);
+        break;
+      case 'Cubic Inches':
+        result = ConversionUtils.litersToCubicInches(valueInLiters);
+        break;
+      case 'Quarts':
+        result = ConversionUtils.litersToQuarts(valueInLiters);
+        break;
+      case 'Pints':
+        result = ConversionUtils.litersToPints(valueInLiters);
+        break;
+      case 'Cups':
+        result = ConversionUtils.litersToCups(valueInLiters);
+        break;
+      default:
+        result = valueInLiters;
+    }
+
     setState(() {
-      _result = _toLiters ? input / 1000 : input * 1000; // mL ↔ L
+      _result = result;
     });
   }
 
@@ -44,13 +131,42 @@ class _VolumeConverterState extends State<VolumeConverter> {
               ),
             ),
             const SizedBox(height: 16),
-            DropdownButton<bool>(
-              value: _toLiters,
-              items: const [
-                DropdownMenuItem(value: true, child: Text('Milliliters → Liters')),
-                DropdownMenuItem(value: false, child: Text('Liters → Milliliters')),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: _fromUnit,
+                    items: _volumeUnits.map((String unit) {
+                      return DropdownMenuItem<String>(
+                        value: unit,
+                        child: Text(unit),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _fromUnit = newValue!;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: _toUnit,
+                    items: _volumeUnits.map((String unit) {
+                      return DropdownMenuItem<String>(
+                        value: unit,
+                        child: Text(unit),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _toUnit = newValue!;
+                      });
+                    },
+                  ),
+                ),
               ],
-              onChanged: (val) => setState(() => _toLiters = val!),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -58,7 +174,7 @@ class _VolumeConverterState extends State<VolumeConverter> {
               child: const Text('Convert'),
             ),
             const SizedBox(height: 16),
-            Text('Result: $_result', style: const TextStyle(fontSize: 18)),
+            Text('Result: ${_result.toStringAsFixed(6)}', style: const TextStyle(fontSize: 18)),
             const Spacer(),
             const AdBanner(),
           ],
