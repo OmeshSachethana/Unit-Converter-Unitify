@@ -17,16 +17,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final converters = [
-      {'name': 'Length', 'screen': const LengthConverter()},
-      {'name': 'Weight', 'screen': const WeightConverter()},
-      {'name': 'Temperature', 'screen': const TemperatureConverter()},
-      {'name': 'Area', 'screen': const AreaConverter()},
-      {'name': 'Volume', 'screen': const VolumeConverter()},
-      {'name': 'Time', 'screen': const TimeConverter()},
-      {'name': 'Speed', 'screen': const SpeedConverter()},
-      {'name': 'Digital Storage', 'screen': const DigitalStorageConverter()},
-      {'name': 'Currency', 'screen': const CurrencyConverter()},
-      {'name': 'Energy', 'screen': const EnergyConverter()},
+      {'name': 'Length', 'screen': const LengthConverter(), 'icon': Icons.straighten, 'color': Colors.blue},
+      {'name': 'Weight', 'screen': const WeightConverter(), 'icon': Icons.fitness_center, 'color': Colors.green},
+      {'name': 'Temperature', 'screen': const TemperatureConverter(), 'icon': Icons.thermostat, 'color': Colors.orange},
+      {'name': 'Area', 'screen': const AreaConverter(), 'icon': Icons.crop_square, 'color': Colors.purple},
+      {'name': 'Volume', 'screen': const VolumeConverter(), 'icon': Icons.water_drop, 'color': Colors.cyan},
+      {'name': 'Time', 'screen': const TimeConverter(), 'icon': Icons.access_time, 'color': Colors.indigo},
+      {'name': 'Speed', 'screen': const SpeedConverter(), 'icon': Icons.speed, 'color': Colors.red},
+      {'name': 'Digital Storage', 'screen': const DigitalStorageConverter(), 'icon': Icons.sd_storage, 'color': Colors.blueGrey},
+      {'name': 'Currency', 'screen': const CurrencyConverter(), 'icon': Icons.currency_exchange, 'color': Colors.lightGreen},
+      {'name': 'Energy', 'screen': const EnergyConverter(), 'icon': Icons.bolt, 'color': Colors.amber},
     ];
 
     return Scaffold(
@@ -35,27 +35,84 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        elevation: 1,
+        elevation: 2,
+        shadowColor: Colors.black12,
       ),
       body: Column(
         children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Convert between different units easily',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           Expanded(
-            child: ListView.builder(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.2,
+              ),
               itemCount: converters.length,
               itemBuilder: (context, index) {
+                final converter = converters[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    title: Text(converters[index]['name'] as String),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  elevation: 4,
+                  shadowColor: Colors.black12,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(16),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => converters[index]['screen'] as Widget,
+                          builder: (_) => converter['screen'] as Widget,
                         ),
                       );
                     },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            converter['color'] as Color,
+                            (converter['color'] as Color).withOpacity(0.7),
+                          ],
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            converter['icon'] as IconData,
+                            size: 40,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            converter['name'] as String,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
