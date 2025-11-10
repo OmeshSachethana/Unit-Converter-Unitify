@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:unit_converter_unitify/screens/converter_screens/currency_converter.dart';
 import 'package:unit_converter_unitify/screens/converter_screens/digital_storage_converter.dart';
 import 'package:unit_converter_unitify/screens/converter_screens/energy_converter.dart';
@@ -134,21 +135,22 @@ class HomeScreen extends StatelessWidget {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.blue.shade700, Colors.blue.shade400],
-              ),
+              color: const Color.fromARGB(255, 8, 5, 49), // Plain solid color
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Icon(
-                  Icons.science,
-                  size: 48,
-                  color: Colors.white,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12), // adjust radius as needed
+                  child: Image.asset(
+                    'assets/unitify_logo.png',
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover, // looks better with rounded corners
+                  ),
                 ),
+
                 const SizedBox(height: 8),
                 const Text(
                   'Unitify',
@@ -203,7 +205,6 @@ class HomeScreen extends StatelessWidget {
             leading: const Icon(Icons.share, color: Colors.purple),
             title: const Text('Share App'),
             onTap: () {
-              // Share functionality would go here
               Navigator.pop(context);
               _showShareDialog(context);
             },
@@ -212,7 +213,6 @@ class HomeScreen extends StatelessWidget {
             leading: const Icon(Icons.rate_review, color: Colors.amber),
             title: const Text('Rate App'),
             onTap: () {
-              // Rate app functionality would go here
               Navigator.pop(context);
               _showRateDialog(context);
             },
@@ -268,29 +268,27 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showExitDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Exit App'),
-          content: const Text('Are you sure you want to exit?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                // Exit the app
-                // Note: This might not work on all platforms
-                // For mobile, you might need to use SystemNavigator.pop()
-              },
-              child: const Text('Exit'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Exit App'),
+        content: const Text('Are you sure you want to exit?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              SystemNavigator.pop();  // Exit the app
+            },
+            child: const Text('Exit'),
+          ),
+        ],
+      );
+    },
+  );
+}
 }
