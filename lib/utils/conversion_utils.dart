@@ -180,8 +180,8 @@ class ConversionUtils {
   }
 
   // Currency conversions
-  static double convertCurrency(double value, String fromCurrency, String toCurrency) {
-    final Map<String, double> rates = {
+  static double convertCurrency(double value, String fromCurrency, String toCurrency, [Map<String, double>? customRates]) {
+    final Map<String, double> rates = customRates ?? {
       'USD': 1.0,
       'EUR': 0.85,
       'GBP': 0.73,

@@ -11,16 +11,32 @@ class CurrencyConverter extends StatefulWidget {
 
 class _CurrencyConverterState extends State<CurrencyConverter> {
   final TextEditingController _controller = TextEditingController();
+  final TextEditingController _usdRateController = TextEditingController();
   double _result = 0.0;
   String _fromCurrency = 'USD';
   String _toCurrency = 'EUR';
+  Map<String, double> _customRates = {};
+  bool _usingCustomRates = false;
   
   final List<String> _currencies = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD'];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with default rates
+    _customRates = {
+      'USD': 1.0,
+      'EUR': 0.85,
+      'GBP': 0.73,
+      'JPY': 110.0,
+      'CAD': 1.25,
+      'AUD': 1.35,
+    };
+  }
 
   void _convert() {
     final input = double.tryParse(_controller.text);
     if (input == null) {
-      // Show error to user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please enter a valid number'))
       );
@@ -28,8 +44,107 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
     }
 
     setState(() {
-      _result = ConversionUtils.convertCurrency(input, _fromCurrency, _toCurrency);
+      _result = _usingCustomRates 
+          ? ConversionUtils.convertCurrency(input, _fromCurrency, _toCurrency, _customRates)
+          : ConversionUtils.convertCurrency(input, _fromCurrency, _toCurrency);
     });
+  }
+
+  void _showCustomRatesDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Set Today\'s Exchange Rates'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Enter exchange rates relative to USD (1 USD = ?)',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              const SizedBox(height: 16),
+              ..._currencies.where((currency) => currency != 'USD').map((currency) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Text(
+                        '1 USD = ',
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: _customRates[currency]?.toStringAsFixed(4) ?? '',
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          decoration: InputDecoration(
+                            labelText: currency,
+                            border: const OutlineInputBorder(),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                          ),
+                          onChanged: (value) {
+                            final rate = double.tryParse(value);
+                            if (rate != null && rate > 0) {
+                              _customRates[currency] = rate;
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              const SizedBox(height: 16),
+              SwitchListTile(
+                title: const Text('Use custom rates'),
+                value: _usingCustomRates,
+                onChanged: (value) {
+                  setState(() {
+                    _usingCustomRates = value;
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _usingCustomRates = true;
+              });
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Custom rates applied successfully'))
+              );
+            },
+            child: const Text('Apply Rates'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _resetToDefaultRates() {
+    setState(() {
+      _usingCustomRates = false;
+      _customRates = {
+        'USD': 1.0,
+        'EUR': 0.85,
+        'GBP': 0.73,
+        'JPY': 110.0,
+        'CAD': 1.25,
+        'AUD': 1.35,
+      };
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Reset to default rates'))
+    );
   }
 
   // Helper function to get currency flag emoji
@@ -81,6 +196,13 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
         foregroundColor: Colors.black,
         elevation: 2,
         shadowColor: Colors.black12,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: _showCustomRatesDialog,
+            tooltip: 'Set Exchange Rates',
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -90,6 +212,50 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
+                    // Custom Rates Indicator
+                    if (_usingCustomRates)
+                      Card(
+                        elevation: 2,
+                        color: Colors.green[50],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(color: Colors.green[100]!),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color: Colors.green[600],
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Using custom exchange rates',
+                                  style: TextStyle(
+                                    color: Colors.green[800],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: _resetToDefaultRates,
+                                child: Text(
+                                  'Reset',
+                                  style: TextStyle(
+                                    color: Colors.green[700],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (_usingCustomRates) const SizedBox(height: 16),
+
                     Card(
                       elevation: 4,
                       shadowColor: Colors.black12,
@@ -365,14 +531,38 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                             ),
                             const SizedBox(width: 12),
                             Expanded(
-                              child: Text(
-                                'Note: Uses fixed exchange rates. For real-time rates, integrate with an API.',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.blue[800],
-                                  height: 1.4,
-                                ),
-                                textAlign: TextAlign.left,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _usingCustomRates
+                                        ? 'Using custom exchange rates. Tap settings to modify.'
+                                        : 'Using default rates. Tap settings icon to set today\'s rates.',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.blue[800],
+                                      height: 1.4,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  if (!_usingCustomRates)
+                                    TextButton(
+                                      onPressed: _showCustomRatesDialog,
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size.zero,
+                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      child: Text(
+                                        'Set today\'s rates',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.blue[700],
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
                           ],
