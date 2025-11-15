@@ -28,7 +28,13 @@ class _AreaConverterState extends State<AreaConverter> {
 
   void _convert() {
     final input = double.tryParse(_controller.text);
-    if (input == null) return;
+    if (input == null) {
+      // Show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid number'))
+      );
+      return;
+    }
 
     double valueInSquareMeters;
     switch (_fromUnit) {

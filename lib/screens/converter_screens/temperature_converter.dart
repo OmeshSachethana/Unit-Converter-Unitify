@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/conversion_utils.dart';
+import '../../utils/conversion_formulas.dart';
 import '../../widgets/ad_banner.dart';
 
 class TemperatureConverter extends StatefulWidget {
@@ -14,6 +15,8 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
   double _result = 0.0;
   String _fromUnit = 'Celsius';
   String _toUnit = 'Fahrenheit';
+  String _conversionFormula = '';
+  String _conversionExplanation = '';
 
   final List<String> _temperatureUnits = [
     'Celsius',
@@ -23,7 +26,13 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
 
   void _convert() {
     final input = double.tryParse(_controller.text);
-    if (input == null) return;
+    if (input == null) {
+      // Show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid number'))
+      );
+      return;
+    }
 
     double result = 0.0;
 
@@ -46,7 +55,28 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
 
     setState(() {
       _result = result;
+      _conversionFormula = ConversionFormulas.getTemperatureFormulas(_fromUnit, _toUnit)['formula']!;
+      _conversionExplanation = _getConversionExplanation(input, result);
     });
+  }
+
+  String _getConversionExplanation(double input, double result) {
+    if (_fromUnit == 'Celsius' && _toUnit == 'Fahrenheit') {
+      return 'To convert Celsius to Fahrenheit: Multiply by 9/5, then add 32. Water freezes at 0°C (32°F) and boils at 100°C (212°F).';
+    } else if (_fromUnit == 'Fahrenheit' && _toUnit == 'Celsius') {
+      return 'To convert Fahrenheit to Celsius: Subtract 32, then multiply by 5/9. Water freezes at 32°F (0°C) and boils at 212°F (100°C).';
+    } else if (_fromUnit == 'Celsius' && _toUnit == 'Kelvin') {
+      return 'To convert Celsius to Kelvin: Add 273.15. Absolute zero is -273.15°C (0K). Kelvin uses the same increment as Celsius.';
+    } else if (_fromUnit == 'Kelvin' && _toUnit == 'Celsius') {
+      return 'To convert Kelvin to Celsius: Subtract 273.15. Absolute zero is 0K (-273.15°C). Kelvin uses the same increment as Celsius.';
+    } else if (_fromUnit == 'Fahrenheit' && _toUnit == 'Kelvin') {
+      return 'To convert Fahrenheit to Kelvin: Subtract 32, multiply by 5/9, then add 273.15. Combines both conversion formulas.';
+    } else if (_fromUnit == 'Kelvin' && _toUnit == 'Fahrenheit') {
+      return 'To convert Kelvin to Fahrenheit: Subtract 273.15, multiply by 9/5, then add 32. Combines both conversion formulas.';
+    } else if (_fromUnit == _toUnit) {
+      return 'Same unit conversion - no calculation needed.';
+    }
+    return 'Temperature conversion between $_fromUnit and $_toUnit scales.';
   }
 
   @override
@@ -213,6 +243,88 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
                         ),
                       ),
                     ),
+                    
+                    // Conversion Formula Card
+                    if (_conversionFormula.isNotEmpty)
+                    Column(
+                      children: [
+                        const SizedBox(height: 24),
+                        Card(
+                          elevation: 4,
+                          shadowColor: Colors.black12,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Icon(Icons.calculate, color: Colors.orange, size: 20),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Conversion Formula',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange[50],
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: Colors.orange[100]!),
+                                  ),
+                                  child: Text(
+                                    _conversionFormula,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.orange,
+                                      fontFamily: 'Monospace',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                const Row(
+                                  children: [
+                                    Icon(Icons.info_outline, color: Colors.green, size: 18),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'How it works:',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  _conversionExplanation,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(height: 24),
                     Card(
                       elevation: 4,

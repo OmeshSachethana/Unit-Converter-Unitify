@@ -19,7 +19,13 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
 
   void _convert() {
     final input = double.tryParse(_controller.text);
-    if (input == null) return;
+    if (input == null) {
+      // Show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid number'))
+      );
+      return;
+    }
 
     setState(() {
       _result = ConversionUtils.convertCurrency(input, _fromCurrency, _toCurrency);

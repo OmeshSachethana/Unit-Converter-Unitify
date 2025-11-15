@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/conversion_utils.dart';
+import '../../utils/conversion_formulas.dart';
 import '../../widgets/ad_banner.dart';
 
 class LengthConverter extends StatefulWidget {
@@ -14,6 +15,8 @@ class _LengthConverterState extends State<LengthConverter> {
   double _result = 0.0;
   String _fromUnit = 'Meters';
   String _toUnit = 'Kilometers';
+  String _conversionFormula = '';
+  String _conversionExplanation = '';
 
   final List<String> _lengthUnits = [
     'Meters',
@@ -28,7 +31,13 @@ class _LengthConverterState extends State<LengthConverter> {
 
   void _convert() {
     final input = double.tryParse(_controller.text);
-    if (input == null) return;
+    if (input == null) {
+      // Show error to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid number'))
+      );
+      return;
+    }
 
     double result = 0.0;
 
@@ -95,7 +104,36 @@ class _LengthConverterState extends State<LengthConverter> {
 
     setState(() {
       _result = result;
+      _conversionFormula = ConversionFormulas.getLengthFormulas(_fromUnit, _toUnit)['formula']!;
+      _conversionExplanation = _getConversionExplanation(input, result);
     });
+  }
+
+  String _getConversionExplanation(double input, double result) {
+    if (_fromUnit == 'Meters' && _toUnit == 'Kilometers') {
+      return 'There are 1000 meters in 1 kilometer. To convert meters to kilometers, divide by 1000.';
+    } else if (_fromUnit == 'Kilometers' && _toUnit == 'Meters') {
+      return 'There are 1000 meters in 1 kilometer. To convert kilometers to meters, multiply by 1000.';
+    } else if (_fromUnit == 'Meters' && _toUnit == 'Centimeters') {
+      return 'There are 100 centimeters in 1 meter. To convert meters to centimeters, multiply by 100.';
+    } else if (_fromUnit == 'Centimeters' && _toUnit == 'Meters') {
+      return 'There are 100 centimeters in 1 meter. To convert centimeters to meters, divide by 100.';
+    } else if (_fromUnit == 'Meters' && _toUnit == 'Feet') {
+      return '1 meter equals approximately 3.28084 feet. To convert meters to feet, multiply by 3.28084.';
+    } else if (_fromUnit == 'Feet' && _toUnit == 'Meters') {
+      return '1 foot equals approximately 0.3048 meters. To convert feet to meters, divide by 3.28084.';
+    } else if (_fromUnit == 'Meters' && _toUnit == 'Inches') {
+      return '1 meter equals approximately 39.3701 inches. To convert meters to inches, multiply by 39.3701.';
+    } else if (_fromUnit == 'Inches' && _toUnit == 'Meters') {
+      return '1 inch equals approximately 0.0254 meters. To convert inches to meters, divide by 39.3701.';
+    } else if (_fromUnit == 'Meters' && _toUnit == 'Miles') {
+      return '1 mile equals 1609.34 meters. To convert meters to miles, divide by 1609.34.';
+    } else if (_fromUnit == 'Miles' && _toUnit == 'Meters') {
+      return '1 mile equals 1609.34 meters. To convert miles to meters, multiply by 1609.34.';
+    } else if (_fromUnit == _toUnit) {
+      return 'Same unit conversion - no calculation needed.';
+    }
+    return 'Conversion between $_fromUnit and $_toUnit using standard conversion factors.';
   }
 
   @override
@@ -262,6 +300,88 @@ class _LengthConverterState extends State<LengthConverter> {
                         ),
                       ),
                     ),
+                    
+                    // Conversion Formula Card
+                    if (_conversionFormula.isNotEmpty)
+                    Column(
+                      children: [
+                        const SizedBox(height: 24),
+                        Card(
+                          elevation: 4,
+                          shadowColor: Colors.black12,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Row(
+                                  children: [
+                                    Icon(Icons.calculate, color: Colors.blue, size: 20),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Conversion Formula',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue[50],
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: Colors.blue[100]!),
+                                  ),
+                                  child: Text(
+                                    _conversionFormula,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.blue,
+                                      fontFamily: 'Monospace',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                const Row(
+                                  children: [
+                                    Icon(Icons.info_outline, color: Colors.green, size: 18),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'How it works:',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  _conversionExplanation,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(height: 24),
                     Card(
                       elevation: 4,
