@@ -2,7 +2,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdMobService {
   static String get bannerAdUnitId => 'ca-app-pub-7716352626622549/8653208183';
-  static String get interstitialAdUnitId => 'ca-app-pub-3940256099942544/1033173712'; // Test ID
+  static String get interstitialAdUnitId => 'ca-app-pub-7716352626622549/2973947033';
 
   static int _conversionCount = 0;
   static InterstitialAd? _interstitialAd;
