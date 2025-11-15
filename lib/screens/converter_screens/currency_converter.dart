@@ -23,7 +23,6 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
   @override
   void initState() {
     super.initState();
-    // Initialize with default rates
     _customRates = {
       'USD': 1.0,
       'EUR': 0.85,
@@ -147,7 +146,6 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
     );
   }
 
-  // Helper function to get currency flag emoji
   String _getCurrencyFlag(String currency) {
     switch (currency) {
       case 'USD':
@@ -167,7 +165,6 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
     }
   }
 
-  // Helper function to get currency full name
   String _getCurrencyName(String currency) {
     switch (currency) {
       case 'USD':
@@ -185,6 +182,49 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
       default:
         return currency;
     }
+  }
+
+  // Helper method to build dropdown items with better layout
+  Widget _buildDropdownItem(String currency) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 48),
+      child: Row(
+        children: [
+          Text(
+            _getCurrencyFlag(currency),
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  currency,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  _getCurrencyName(currency),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -212,7 +252,6 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    // Custom Rates Indicator
                     if (_usingCustomRates)
                       Card(
                         elevation: 2,
@@ -314,38 +353,9 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                                             isExpanded: true,
                                             underline: const SizedBox(),
                                             items: _currencies.map((String currency) {
-                                              return DropdownMenuItem(
+                                              return DropdownMenuItem<String>(
                                                 value: currency,
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      _getCurrencyFlag(currency),
-                                                      style: const TextStyle(fontSize: 18),
-                                                    ),
-                                                    const SizedBox(width: 12),
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            currency,
-                                                            style: const TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w600,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            _getCurrencyName(currency),
-                                                            style: const TextStyle(
-                                                              fontSize: 12,
-                                                              color: Colors.grey,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                child: _buildDropdownItem(currency),
                                               );
                                             }).toList(),
                                             onChanged: (val) => setState(() => _fromCurrency = val!),
@@ -382,38 +392,9 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                                             isExpanded: true,
                                             underline: const SizedBox(),
                                             items: _currencies.map((String currency) {
-                                              return DropdownMenuItem(
+                                              return DropdownMenuItem<String>(
                                                 value: currency,
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      _getCurrencyFlag(currency),
-                                                      style: const TextStyle(fontSize: 18),
-                                                    ),
-                                                    const SizedBox(width: 12),
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            currency,
-                                                            style: const TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w600,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            _getCurrencyName(currency),
-                                                            style: const TextStyle(
-                                                              fontSize: 12,
-                                                              color: Colors.grey,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                child: _buildDropdownItem(currency),
                                               );
                                             }).toList(),
                                             onChanged: (val) => setState(() => _toCurrency = val!),
