@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter_unitify/ads/admob_service.dart';
 import '../../utils/conversion_utils.dart';
 import '../../widgets/ad_banner.dart';
 
@@ -113,6 +114,10 @@ class _VolumeConverterState extends State<VolumeConverter> {
     setState(() {
       _result = result;
     });
+
+    // Track conversion for interstitial ads
+    AdMobService.trackConversion();
+    
   }
 
   @override

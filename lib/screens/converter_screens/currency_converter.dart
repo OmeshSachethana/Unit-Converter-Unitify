@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter_unitify/ads/admob_service.dart';
 import '../../utils/conversion_utils.dart';
 import '../../widgets/ad_banner.dart';
 
@@ -47,6 +48,9 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
           ? ConversionUtils.convertCurrency(input, _fromCurrency, _toCurrency, _customRates)
           : ConversionUtils.convertCurrency(input, _fromCurrency, _toCurrency);
     });
+
+    // Track conversion for interstitial ads
+    AdMobService.trackConversion();
   }
 
   void _showCustomRatesDialog() {

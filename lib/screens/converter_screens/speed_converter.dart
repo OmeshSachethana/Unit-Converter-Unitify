@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter_unitify/ads/admob_service.dart';
 import '../../utils/conversion_utils.dart';
 import '../../widgets/ad_banner.dart';
 
@@ -30,6 +31,10 @@ class _SpeedConverterState extends State<SpeedConverter> {
     setState(() {
       _result = ConversionUtils.convertSpeed(input, _fromUnit, _toUnit);
     });
+
+    // Track conversion for interstitial ads
+    AdMobService.trackConversion();
+    
   }
 
   @override

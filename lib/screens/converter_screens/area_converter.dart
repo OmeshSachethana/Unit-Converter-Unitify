@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../utils/conversion_utils.dart';
 import '../../widgets/ad_banner.dart';
+import '../../ads/admob_service.dart';
 
 class AreaConverter extends StatefulWidget {
   const AreaConverter({Key? key}) : super(key: key);
@@ -99,6 +100,9 @@ class _AreaConverterState extends State<AreaConverter> {
     setState(() {
       _result = result;
     });
+
+    // Track conversion for interstitial ads
+    AdMobService.trackConversion();
   }
 
   @override

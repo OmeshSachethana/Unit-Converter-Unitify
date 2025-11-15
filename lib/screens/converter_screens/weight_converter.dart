@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unit_converter_unitify/ads/admob_service.dart';
 import '../../utils/conversion_utils.dart';
 import '../../utils/conversion_formulas.dart';
 import '../../widgets/ad_banner.dart';
@@ -90,6 +91,10 @@ class _WeightConverterState extends State<WeightConverter> {
       _conversionFormula = ConversionFormulas.getWeightFormulas(_fromUnit, _toUnit)['formula']!;
       _conversionExplanation = _getConversionExplanation(input, result);
     });
+
+    // Track conversion for interstitial ads
+    AdMobService.trackConversion();
+    
   }
 
   String _getConversionExplanation(double input, double result) {
