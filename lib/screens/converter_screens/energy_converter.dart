@@ -37,7 +37,7 @@ class _EnergyConverterState extends State<EnergyConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Energy Converter'),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.amber,
         foregroundColor: Colors.black,
         elevation: 2,
         shadowColor: Colors.black12,

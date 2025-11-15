@@ -120,8 +120,8 @@ class _WeightConverterState extends State<WeightConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Weight Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),

@@ -232,8 +232,8 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Currency Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.lightGreen,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
         actions: [

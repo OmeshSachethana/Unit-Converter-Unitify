@@ -84,8 +84,8 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Temperature Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),

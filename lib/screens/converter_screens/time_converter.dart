@@ -37,8 +37,8 @@ class _TimeConverterState extends State<TimeConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Time Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),

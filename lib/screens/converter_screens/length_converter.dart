@@ -141,8 +141,8 @@ class _LengthConverterState extends State<LengthConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Length Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),

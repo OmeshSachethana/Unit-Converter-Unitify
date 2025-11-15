@@ -106,8 +106,8 @@ class _AreaConverterState extends State<AreaConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Area Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.purple,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),

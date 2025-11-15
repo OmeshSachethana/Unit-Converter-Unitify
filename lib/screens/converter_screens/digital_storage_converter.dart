@@ -37,8 +37,8 @@ class _DigitalStorageConverterState extends State<DigitalStorageConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Digital Storage Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.blueGrey,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),

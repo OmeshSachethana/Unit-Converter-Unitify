@@ -37,8 +37,8 @@ class _SpeedConverterState extends State<SpeedConverter> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Speed Converter'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
         elevation: 2,
         shadowColor: Colors.black12,
       ),
